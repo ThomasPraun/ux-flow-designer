@@ -29,17 +29,17 @@ CHECK docs/product/prd.md exists
     OR accept direct user input as feature descriptions
 
 IF user mentions "figma" or "export to figma" →
-  READ references/figma-integration.md
-  FOR each required MCP/plugin → verify installed, offer install if missing
+  INFORM user of all requirements (see "Figma Export" section below)
+  WAIT for user confirmation before reading references/figma-integration.md or checking MCPs
 ```
 
 ## Workflow
 
-Designing app flows involves these steps:
+Designing app flows involves these steps. ALL four phases are mandatory and must be executed in order.
 
 1. Extract use cases (from PRD or user input)
 2. Generate Mermaid flow diagrams (screen map + per use case)
-3. Generate HTML wireframes (per unique screen)
+3. **Generate HTML wireframes as a clickable prototype (with inter-screen navigation) and offer browser preview** — NEVER skip this phase
 4. Consolidate into master handoff document
 
 ---
@@ -96,26 +96,55 @@ Generate index at `docs/ux-flows/diagrams/INDEX.md` listing all diagrams with li
 
 ---
 
-### Phase 3 — HTML Wireframes
+### Phase 3 — HTML Wireframes (Clickable Prototype)
 
-For each unique screen identified in the flowcharts, generate an HTML file.
+> **MANDATORY**: This phase MUST NOT be skipped, summarized, or deferred. Every invocation of this skill that reaches Phase 2 MUST continue to Phase 3. Do not ask the user whether to proceed — just do it.
 
-Use `assets/wireframe-template.html` as the base template.
+**Step 1: Generate HTML files**
 
-**Requirements:**
+For each unique screen identified in the flowcharts, generate an HTML file using `assets/wireframe-template.html` as the base template.
+
+Requirements:
 - Self-contained: inline CSS only, no external dependencies
 - Mobile-first: 375px viewport width
 - Wireframe aesthetic: grays (`#f5f5f5` bg), dashed borders (`#ccc`), placeholder text (`#666`)
-- Use template CSS classes: `.wf-header`, `.wf-input`, `.wf-button`, `.wf-card`, `.wf-nav`, `.wf-list-item`, `.wf-tab-bar`, `.wf-icon-placeholder`
+- Use template CSS classes: `.wf-header`, `.wf-input`, `.wf-button`, `.wf-card`, `.wf-nav`, `.wf-list-item`, `.wf-tab-bar`, `.wf-icon-placeholder`, `.wf-link`, `.wf-back`
 - Include screen name and related use case in footer metadata
 
-Save to `docs/ux-flows/wireframes/`.
+**Step 2: Add inter-screen navigation**
+
+Every wireframe must link to other screens using `<a href="target.html" class="wf-link">`. This creates a clickable prototype navigable in any browser — no JavaScript needed.
+
+Navigation rules:
+- **Buttons** that logically navigate: wrap in `<a href="target.html" class="wf-link"><div class="wf-button">Label</div></a>`
+- **Tab bar**: each tab is an `<a class="wf-link">` pointing to its screen. Tab bar must be consistent across all screens that share it.
+- **Back buttons**: `<a href="previous.html" class="wf-link wf-back">&larr; Back</a>` in the `.wf-nav` bar
+- **Tappable list items**: wrap in `<a href="detail.html" class="wf-link"><div class="wf-list-item">...</div></a>`
+- **Tappable cards**: wrap in `<a href="target.html" class="wf-link"><div class="wf-card">...</div></a>`
+- **No dead ends**: every screen must have at least one outgoing link (back button, tab bar, or action button)
+- **No JavaScript**: pure HTML `<a>` navigation only — no onclick, no form submissions, no JS
+
+**Step 3: Save and generate index**
+
+Save all wireframes to `docs/ux-flows/wireframes/`.
 
 Generate inventory at `docs/ux-flows/wireframes/INDEX.md`:
-- Screen name
-- File link
-- Related use cases
-- Key elements/components on the screen
+
+| Column | Description |
+|--------|-------------|
+| Screen name | Human-readable name |
+| File link | Relative link to .html file |
+| Related use cases | UC-IDs |
+| Key elements | Main components on the screen |
+| Outgoing links | List of screens this screen links to |
+
+**Step 4: Offer browser preview**
+
+After generating all wireframes, propose opening the main entry screen in the browser:
+- If Chrome DevTools MCP is available: use `navigate_page` to open the file
+- Fallback: use `open docs/ux-flows/wireframes/{entry-screen}.html` via Bash
+
+Do not wait for the user to ask — proactively offer the preview.
 
 ---
 
@@ -140,6 +169,12 @@ Link to screen-map.md
 - States: link
 - Sequence: link
 
+## Clickable Prototype Links
+| From Screen | Element | To Screen |
+|-------------|---------|-----------|
+| login.html  | [Login] button | home.html |
+| ...         | ...     | ...       |
+
 ## Navigation Patterns
 Summary of recurring navigation patterns (tab bar, back navigation,
 modal flows, drawer menus, etc.)
@@ -148,7 +183,10 @@ modal flows, drawer menus, etc.)
 Design decisions and open questions for ui-ux-pro-max phase.
 ```
 
-If Figma export requested: read `references/figma-integration.md` and follow the export workflow.
+After completing the handoff document, inform the user:
+- The wireframes can optionally be exported to Figma for further visual design work
+- This requires specific MCPs, plugins, and a Figma Professional account
+- If interested, the user can request "export to figma" and the full requirements will be presented
 
 ---
 
@@ -175,8 +213,18 @@ docs/ux-flows/
 
 ## Figma Export (Optional)
 
-Only activate when user explicitly says "figma" or "export to figma".
+This skill can export wireframes to Figma. Do not check for Figma MCPs or plugins automatically.
 
-Read `references/figma-integration.md` for the complete toolchain, required MCPs, plugins, and export workflow.
+**When to mention**: At the end of Phase 4 (handoff), inform the user that Figma export is available as an optional next step.
 
-Never trigger Figma checks automatically. Never check for Figma MCPs unless requested.
+**When the user requests Figma export**, follow this protocol:
+1. **First**: Inform ALL requirements before attempting anything:
+   - Figma Professional seat ($15/month minimum)
+   - Required MCPs: Figma Remote MCP, figma-console-mcp, Chrome DevTools MCP
+   - Required plugins: figma-friend, figma-design, frontend-design
+   - Chrome browser available
+   - See full details in `references/figma-integration.md`
+2. **Then**: Ask user to confirm they have or want to install these prerequisites
+3. **Only then**: Read `references/figma-integration.md` and follow the export workflow
+
+Never silently attempt Figma operations. Always present the full requirements list first.
