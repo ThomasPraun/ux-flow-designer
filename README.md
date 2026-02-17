@@ -9,7 +9,7 @@ Given a PRD or feature descriptions, this skill generates:
 - **Use case documentation** — actors, flows, preconditions, postconditions
 - **Mermaid diagrams** — flowcharts, state diagrams, and sequence diagrams per use case
 - **Master screen map** — full app navigation overview
-- **HTML wireframes** — mobile-first, self-contained, low-fidelity screen layouts
+- **Clickable HTML prototype** — mobile-first wireframes with inter-screen navigation, previewable in any browser
 - **Handoff document** — consolidated index linking all artifacts
 
 ### Output Structure
@@ -54,7 +54,7 @@ The skill activates when you mention flows, wireframes, user journeys, screen ma
 
 1. **Use Case Extraction** — Reads PRD or accepts feature descriptions, documents use cases, asks for approval
 2. **Mermaid Diagrams** — Generates master screen map + 3 diagrams per use case (flow, states, sequence)
-3. **HTML Wireframes** — Creates mobile-first wireframes per unique screen using the bundled template
+3. **Clickable Prototype** — Creates mobile-first wireframes with inter-screen `<a>` navigation and offers browser preview
 4. **Consolidation** — Produces master handoff document linking all artifacts
 
 ## Skill Contents
@@ -76,7 +76,7 @@ ux-flow-designer/
 |-------|------|----------|
 | `product-manager-toolkit` | Upstream: generates the PRD | No |
 | `ui-ux-pro-max` | Downstream: visual design from wireframes | No |
-| Figma MCPs + plugins | Export wireframes to Figma | No (only on request) |
+| Figma MCP | Export wireframes to Figma | No (only on request) |
 
 ## License
 

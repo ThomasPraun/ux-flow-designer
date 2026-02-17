@@ -184,9 +184,9 @@ Design decisions and open questions for ui-ux-pro-max phase.
 ```
 
 After completing the handoff document, inform the user:
-- The wireframes can optionally be exported to Figma for further visual design work
-- This requires specific MCPs, plugins, and a Figma Professional account
-- If interested, the user can request "export to figma" and the full requirements will be presented
+- The wireframes can be exported to Figma using the official **Code to Canvas** integration
+- Only requires Figma desktop app with Dev Mode MCP Server enabled (2-step setup)
+- If interested, the user can request "export to figma" and the setup steps will be presented
 
 ---
 
@@ -213,18 +213,17 @@ docs/ux-flows/
 
 ## Figma Export (Optional)
 
-This skill can export wireframes to Figma. Do not check for Figma MCPs or plugins automatically.
+This skill can export wireframes to Figma. Do not check for Figma MCP automatically.
 
 **When to mention**: At the end of Phase 4 (handoff), inform the user that Figma export is available as an optional next step.
 
 **When the user requests Figma export**, follow this protocol:
-1. **First**: Inform ALL requirements before attempting anything:
-   - Figma Professional seat ($15/month minimum)
-   - Required MCPs: Figma Remote MCP, figma-console-mcp, Chrome DevTools MCP
-   - Required plugins: figma-friend, figma-design, frontend-design
-   - Chrome browser available
+1. **First**: Inform the requirements before attempting anything:
+   - Figma desktop app with **Dev Mode MCP Server** enabled (Preferences → Enable "Dev Mode MCP Server")
+   - MCP added to Claude Code: `claude mcp add --transport sse figma-dev-mode-mcp-server http://127.0.0.1:3845/sse`
+   - Chrome DevTools MCP (already used for wireframe preview)
    - See full details in `references/figma-integration.md`
-2. **Then**: Ask user to confirm they have or want to install these prerequisites
+2. **Then**: Ask user to confirm they have or want to set up these prerequisites
 3. **Only then**: Read `references/figma-integration.md` and follow the export workflow
 
-Never silently attempt Figma operations. Always present the full requirements list first.
+Never silently attempt Figma operations. Always present the requirements first.
